@@ -4,7 +4,7 @@ const passport = require('../config/passport');
 const utils = require('./utils');
 
 module.exports = function(app) {
-    app.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
+    app.post('api/login', passport.authenticate('local', { session: false }), (req, res) => {
         const user = {
             username: req.user.username,
             id: req.user._id
@@ -14,7 +14,7 @@ module.exports = function(app) {
         res.json(token);
     });
 
-    app.post('/signup', (req, res) => {
+    app.post('api/signup', (req, res) => {
         User.create({
             username: req.body.username,
             firstName: req.body.firstName,
@@ -28,7 +28,7 @@ module.exports = function(app) {
         });
     });
 
-    app.get('/profile', utils.authenticateJWT, (req, res, next) => {
+    app.get('api/profile', utils.authenticateJWT, (req, res, next) => {
         // res.json({ user: req.user, message: "Successfully authenticated user" });
         User.findOne( {_id: req.user.sub }).then( result => {
             res.json(result);
